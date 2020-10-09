@@ -36,10 +36,10 @@
 /******************************************************************************/
 
 /*
- * main.c declares and creates a new simulation_run with parameters defined in
+ * main.c declares and creates a new simulation_run[0] with parameters defined in
  * simparameters.h. The code creates a fifo queue and server for the single
  * server queueuing system. It then loops through the list of random number
- * generator seeds defined in simparameters.h, doing a separate simulation_run
+ * generator seeds defined in simparameters.h, doing a separate simulation_run[0]
  * run for each. To start a run, it schedules the first packet arrival
  * event. When each run is finished, output is printed on the terminal.
  */
@@ -47,8 +47,10 @@
 int
 main(void)
 {
-  Simulation_Run_Ptr simulation_run;
+  Simulation_Run_Ptr simulation_run[3];
   Simulation_Run_Data data;
+  Simulation_Run_Data data_2;
+  Simulation_Run_Data data_3;
 
   Simulation_Run_Data for_avg_acc;
 
@@ -105,16 +107,20 @@ main(void)
       while (random_seed != 0) {
      
 
-        simulation_run = simulation_run_new(); /* Create a new simulation run. */
+        simulation_run[0] = simulation_run_new(); /* Create a new simulation run. */
+        simulation_run[1] = simulation_run_new(); /* Create a new simulation run. */
+        simulation_run[2] = simulation_run_new(); /* Create a new simulation run. */
 
         /*
-         * Set the simulation_run data pointer to our data object.
+         * Set the simulation_run[0] data pointer to our data object.
          */
 
-        simulation_run_attach_data(simulation_run, (void *) & data);
+        simulation_run_attach_data(simulation_run[0], (void *) & data);
+        simulation_run_attach_data(simulation_run[1], (void *) & data_2);
+        simulation_run_attach_data(simulation_run[2], (void *) & data_3);
 
         /* 
-         * Initialize the simulation_run data variables, declared in main.h.
+         * Initialize the simulation_run[0] data variables, declared in main.h.
          */
         
         data.packet_arrival_rate = PACKET_ARRIVAL_RATE_LIST[i];
@@ -143,8 +149,8 @@ main(void)
          * Schedule the initial packet arrival for the current clock time (= 0).
          */
 
-        schedule_packet_arrival_event(simulation_run, 
-                      simulation_run_get_time(simulation_run));
+        schedule_packet_arrival_event(simulation_run[0], 
+                      simulation_run_get_time(simulation_run[0]));
 
         //printf("after schedule arrival event program time %f\n", clock());
         /* 
@@ -153,14 +159,14 @@ main(void)
 
         while(data.number_of_packets_processed < RUNLENGTH) {
           printf("MM_debug while loop program time \n");
-          simulation_run_execute_event(simulation_run);
+          simulation_run_execute_event(simulation_run[0]);
         }
 
         /*
          * Output results and clean up after ourselves.
          */
 
-        output_results(simulation_run);
+        output_results(simulation_run[0]);
 
         for_avg_acc.packet_arrival_rate += data.packet_arrival_rate;
         for_avg_acc.blip_counter += data.blip_counter;
@@ -169,7 +175,7 @@ main(void)
         for_avg_acc.accumulated_delay += data.accumulated_delay;
         for_avg_acc.random_seed += data.random_seed;
 
-        cleanup_memory(simulation_run);
+        cleanup_memory(simulation_run[0]);
 
         j++;
         random_seed = RANDOM_SEEDS[j];

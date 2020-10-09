@@ -43,6 +43,8 @@ typedef struct _simulation_run_data_
   long int number_of_packets_processed;
   double accumulated_delay;
   unsigned random_seed;
+  struct _simulation_run_data_ *up_ptr;
+  struct _simulation_run_data_ *down_ptr;
 } Simulation_Run_Data, * Simulation_Run_Data_Ptr;
 
 typedef enum {XMTTING, WAITING} Packet_Status;
