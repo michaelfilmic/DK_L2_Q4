@@ -45,6 +45,7 @@ cleanup_memory (Simulation_Run_Ptr simulation_run)
   buffer = data->buffer;
   link = data->link;
 
+  //printf("upto here\n");
   if(link->state == BUSY) /* Clean out the server. */
     xfree(server_get(link));
   xfree(link);

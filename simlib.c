@@ -70,6 +70,8 @@ simulation_run_new(void)
   new_simulation_run->eventlist = eventlist_new();
   new_simulation_run->clock = clock_new();
   new_simulation_run->data = NULL;
+  new_simulation_run->up_ptr = NULL;
+  new_simulation_run->down_ptr = NULL;
   return new_simulation_run;
 }
 

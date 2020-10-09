@@ -119,6 +119,8 @@ main(void)
         simulation_run_attach_data(simulation_run[1], (void *) & data_2);
         simulation_run_attach_data(simulation_run[2], (void *) & data_3);
 
+        simulation_run[0]->up_ptr = simulation_run[1];
+        simulation_run[0]->down_ptr = simulation_run[2];
         /* 
          * Initialize the simulation_run[0] data variables, declared in main.h.
          */
@@ -150,6 +152,10 @@ main(void)
          */
 
         schedule_packet_arrival_event(simulation_run[0], 
+                      simulation_run_get_time(simulation_run[0]));
+        schedule_packet_arrival_event(simulation_run[1], 
+                      simulation_run_get_time(simulation_run[0]));
+        schedule_packet_arrival_event(simulation_run[2], 
                       simulation_run_get_time(simulation_run[0]));
 
         //printf("after schedule arrival event program time %f\n", clock());
