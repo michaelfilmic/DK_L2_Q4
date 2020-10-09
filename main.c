@@ -71,7 +71,7 @@ main(void)
   #ifndef NO_CSV_OUTPUT
   // create a csv file
   FILE* fp;
-  char data_set_name[] = "./Q2.csv";
+  char data_set_name[] = "./Q4.csv";
   //file IO
 
   fp = fopen(data_set_name, "w");
@@ -121,6 +121,10 @@ main(void)
 
         simulation_run[0]->up_ptr = simulation_run[1];
         simulation_run[0]->down_ptr = simulation_run[2];
+
+        simulation_run[0]->switch_num = 1;
+        simulation_run[1]->switch_num = 2;
+        simulation_run[2]->switch_num = 3;
         /* 
          * Initialize the simulation_run[0] data variables, declared in main.h.
          */
@@ -131,6 +135,7 @@ main(void)
         data.number_of_packets_processed = 0;
         data.accumulated_delay = 0.0;
         data.random_seed = random_seed;
+        data.switch_num = 1;
      
         /* 
          * Create the packet buffer and transmission link, declared in main.h.
@@ -139,6 +144,35 @@ main(void)
         data.buffer = fifoqueue_new();
         data.link   = server_new();
 
+        data_2.packet_arrival_rate = PACKET_ARRIVAL_RATE_LIST[i];
+        data_2.blip_counter = 0;
+        data_2.arrival_count = 0;
+        data_2.number_of_packets_processed = 0;
+        data_2.accumulated_delay = 0.0;
+        data_2.random_seed = random_seed;
+        data_2.switch_num = 2;
+     
+        /* 
+         * Create the packet buffer and transmission link, declared in main.h.
+         */
+
+        data_2.buffer = fifoqueue_new();
+        data_2.link   = server_new();
+
+        data_3.packet_arrival_rate = PACKET_ARRIVAL_RATE_LIST[i];
+        data_3.blip_counter = 0;
+        data_3.arrival_count = 0;
+        data_3.number_of_packets_processed = 0;
+        data_3.accumulated_delay = 0.0;
+        data_3.random_seed = random_seed;
+        data_3.switch_num = 3;
+     
+        /* 
+         * Create the packet buffer and transmission link, declared in main.h.
+         */
+
+        data_3.buffer = fifoqueue_new();
+        data_3.link   = server_new();
         /* 
          * Set the random number generator seed for this run.
          */
@@ -154,9 +188,9 @@ main(void)
         schedule_packet_arrival_event(simulation_run[0], 
                       simulation_run_get_time(simulation_run[0]));
         schedule_packet_arrival_event(simulation_run[1], 
-                      simulation_run_get_time(simulation_run[0]));
+                      simulation_run_get_time(simulation_run[1]));
         schedule_packet_arrival_event(simulation_run[2], 
-                      simulation_run_get_time(simulation_run[0]));
+                      simulation_run_get_time(simulation_run[2]));
 
         //printf("after schedule arrival event program time %f\n", clock());
         /* 
@@ -164,7 +198,7 @@ main(void)
          */
 
         while(data.number_of_packets_processed < RUNLENGTH) {
-          printf("MM_debug while loop program time \n");
+
           simulation_run_execute_event(simulation_run[0]);
         }
 
@@ -181,7 +215,12 @@ main(void)
         for_avg_acc.accumulated_delay += data.accumulated_delay;
         for_avg_acc.random_seed += data.random_seed;
 
+      printf("sw2 Packet arrival count = %ld \n", data_2.arrival_count);
+      printf("sw3 Packet arrival count = %ld \n", data_3.arrival_count);
+
         cleanup_memory(simulation_run[0]);
+        cleanup_memory(simulation_run[1]);
+        cleanup_memory(simulation_run[2]);
 
         j++;
         random_seed = RANDOM_SEEDS[j];
@@ -193,7 +232,6 @@ main(void)
       for_avg_acc.number_of_packets_processed /= size_rand_seed;
       for_avg_acc.accumulated_delay /= size_rand_seed;
       for_avg_acc.random_seed /= size_rand_seed;
-
 
   #ifndef NO_CSV_OUTPUT
       fp = fopen(data_set_name, "a");

@@ -45,7 +45,7 @@ schedule_end_packet_transmission_event(Simulation_Run_Ptr simulation_run,
 {
   Event event;
 
-  TRACE(printf("MM_debug in schedule_end_packet_transmission_event.\n");)
+
   event.description = "Packet Xmt End";
   event.function = end_packet_transmission_event;
   event.attachment = (void *) link;
@@ -68,7 +68,7 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
   Simulation_Run_Data_Ptr data;
   Packet_Ptr this_packet, next_packet;
 
-  TRACE(printf("MM_debug in end_packet_transmission_event.\n");)
+
   TRACE(printf("End Of Packet.\n"););
 
   data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);

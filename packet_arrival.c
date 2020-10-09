@@ -43,10 +43,13 @@ schedule_packet_arrival_event(Simulation_Run_Ptr simulation_run,
 			      double event_time)
 {
   Event event;
+  //Simulation_Run_Data temp;
+  //temp = simulation_run->data;
 
   event.description = "Packet Arrival";
   event.function = packet_arrival_event;
   event.attachment = (void *) NULL;
+  printf("1 switch_num = %ld \n", simulation_run->switch_num);
 
   return simulation_run_schedule_event(simulation_run, event, event_time);
 }

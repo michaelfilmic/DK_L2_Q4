@@ -56,6 +56,7 @@ typedef struct _simulation_run_
   void * data;
   struct _simulation_run_ *up_ptr;
   struct _simulation_run_ *down_ptr;
+  int switch_num;
 } Simulation_Run, * Simulation_Run_Ptr;
 
 typedef struct _clock_
