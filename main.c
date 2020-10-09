@@ -124,6 +124,19 @@ main(void)
         data.accumulated_delay = 0.0;
         data.random_seed = random_seed;
      
+        data.packet_arrival_rate_2 = PACKET_ARRIVAL_RATE_LIST[i];
+        data.blip_counter_2 = 0;
+        data.arrival_count_2 = 0;
+        data.number_of_packets_processed_2 = 0;
+        data.accumulated_delay_2 = 0.0;
+        data.random_seed_2 = random_seed;
+
+        data.packet_arrival_rate_3 = PACKET_ARRIVAL_RATE_LIST[i];
+        data.blip_counter_3 = 0;
+        data.arrival_count_3 = 0;
+        data.number_of_packets_processed_3 = 0;
+        data.accumulated_delay_3 = 0.0;
+        data.random_seed_3 = random_seed;
         /* 
          * Create the packet buffer and transmission link, declared in main.h.
          */
@@ -131,6 +144,11 @@ main(void)
         data.buffer = fifoqueue_new();
         data.link   = server_new();
 
+        data.buffer_2 = fifoqueue_new();
+        data.link_2 = server_new();
+
+        data.buffer_3 = fifoqueue_new();
+        data.link_3 = server_new();
         /* 
          * Set the random number generator seed for this run.
          */
@@ -152,7 +170,7 @@ main(void)
          */
 
         while(data.number_of_packets_processed < RUNLENGTH) {
-          printf("MM_debug while loop program time \n");
+          //printf("MM_debug while loop program time \n");
           simulation_run_execute_event(simulation_run);
         }
 

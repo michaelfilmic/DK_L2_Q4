@@ -43,6 +43,24 @@ typedef struct _simulation_run_data_
   long int number_of_packets_processed;
   double accumulated_delay;
   unsigned random_seed;
+
+  Fifoqueue_Ptr buffer_2;
+  Server_Ptr link_2;
+  double packet_arrival_rate_2;
+  long int blip_counter_2;
+  long int arrival_count_2;
+  long int number_of_packets_processed_2;
+  double accumulated_delay_2;
+  unsigned random_seed_2;
+
+  Fifoqueue_Ptr buffer_3;
+  Server_Ptr link_3;
+  double packet_arrival_rate_3;
+  long int blip_counter_3;
+  long int arrival_count_3;
+  long int number_of_packets_processed_3;
+  double accumulated_delay_3;
+  unsigned random_seed_3;
 } Simulation_Run_Data, * Simulation_Run_Data_Ptr;
 
 typedef enum {XMTTING, WAITING} Packet_Status;

@@ -151,7 +151,7 @@ simulation_run_schedule_event(Simulation_Run_Ptr simulation_run,
   current_time = simulation_run_get_time(simulation_run);
   event_list = simulation_run_get_eventlist(simulation_run);
 
-  TRACE(printf("MM_debug in simulation_run_schedule_event.\n");)
+  //TRACE(printf("MM_debug in simulation_run_schedule_event.\n");)
   TRACE(printf("At %.3f : ", current_time);)
   TRACE(printf("  event_id %d : ", event_id);)
   TRACE(event_print_type(new_event);)
