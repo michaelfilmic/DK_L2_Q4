@@ -146,7 +146,7 @@ simulation_run_schedule_event(Simulation_Run_Ptr simulation_run,
   Event_Container_Ptr current_container, new_container, 
     next_container;
 
-  printf("2 switch_num = %ld \n", simulation_run->switch_num);
+  TRACE(printf(" switch_num = %ld simulation_run_schedule_event\n", simulation_run->switch_num);)
   double current_time;
   Eventlist_Ptr event_list;
   static long int event_id = 1;
@@ -155,9 +155,12 @@ simulation_run_schedule_event(Simulation_Run_Ptr simulation_run,
   event_list = simulation_run_get_eventlist(simulation_run);
 
 
+  TRACE(printf(" switch_num = %ld ", simulation_run->switch_num);)
   TRACE(printf("At %.3f : ", current_time);)
   TRACE(printf("  event_id %d : ", event_id);)
+  TRACE(printf(" switch_num = %ld ", simulation_run->switch_num);)
   TRACE(event_print_type(new_event);)
+  TRACE(printf(" switch_num = %ld ", simulation_run->switch_num);)
   TRACE(printf("Scheduled for  %.3f \n", new_event_time);)
 
   /* Test for time scheduling error. */
@@ -270,9 +273,10 @@ simulation_run_deschedule_event(Simulation_Run_Ptr simulation_run,
 
       content_ptr = found_container->data_ptr;
 
+      TRACE(printf(" switch_num = %ld ", simulation_run->switch_num);)
       TRACE(printf("At %.2f : ", simulation_run_get_time(simulation_run));)
       TRACE(event_print_type(found_container->event);)
-      TRACE(printf("descheduled\n");)
+      TRACE(printf(" switch_num = %ld descheduled\n", simulation_run->switch_num);)
 
       free((void*) found_container);
       event_list->size--;
@@ -298,7 +302,6 @@ simulation_run_get_event(Simulation_Run_Ptr simulation_run)
 
   event_list = simulation_run_get_eventlist(simulation_run);
 
-  printf("3 switch_num = %ld \n", simulation_run->switch_num);
   if (event_list->size == 0) {
     printf("*** Error: No Events are scheduled ... cannot continue! ***\n");
     exit(1);
@@ -334,8 +337,9 @@ simulation_run_execute_event(Simulation_Run_Ptr simulation_run)
 			  current_container->occurrence_time);
 
   TRACE(printf("\n");)
+  TRACE(printf(" switch_num = %ld ", simulation_run->switch_num);)
   TRACE(event_print_type(current_container->event);)
-  TRACE(printf("occurring at %.3f\n", simulation_run_get_time(simulation_run));)
+  TRACE(printf(" switch_num = %ld occurring at %.3f\n", simulation_run->switch_num, simulation_run_get_time(simulation_run));)
 
   (*(current_container->event.function))(simulation_run,
 			current_container->event.attachment);

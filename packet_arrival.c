@@ -29,6 +29,7 @@
 #include "packet_transmission.h"
 #include "packet_arrival.h"
 
+#include "trace.h"
 /******************************************************************************/
 
 /*
@@ -41,15 +42,23 @@
 long int
 schedule_packet_arrival_event(Simulation_Run_Ptr simulation_run,
 			      double event_time)
+    //type_of_arrival: 0 - lamda, 1 - output_sw1 
 {
   Event event;
   //Simulation_Run_Data temp;
   //temp = simulation_run->data;
 
+  if (simulation_run->type_of_arrival == 0)
+  {
+      TRACE(printf(" switch_num = %ld lamda schedule_arrival  \n", simulation_run->switch_num);)
+  }
+  else if (simulation_run->type_of_arrival == 1)
+  {
+      TRACE(printf(" switch_num = %ld output of sw1 schedule_arrival  \n", simulation_run->switch_num);)
+  }
   event.description = "Packet Arrival";
   event.function = packet_arrival_event;
   event.attachment = (void *) NULL;
-  printf("1 switch_num = %ld \n", simulation_run->switch_num);
 
   return simulation_run_schedule_event(simulation_run, event, event_time);
 }
@@ -92,10 +101,12 @@ packet_arrival_event(Simulation_Run_Ptr simulation_run, void * ptr)
    * Schedule the next packet arrival. Independent, exponentially distributed
    * interarrival times gives us Poisson process arrivals.
    */
+  if (simulation_run->type_of_arrival == 0)
+  { //if lamda
 
-  schedule_packet_arrival_event(simulation_run,
-			simulation_run_get_time(simulation_run) +
-			exponential_generator((double) 1/data->packet_arrival_rate));
+  schedule_packet_arrival_event(simulation_run, simulation_run_get_time(simulation_run) + data->packet_arrival_rate); 
+  //schedule_packet_arrival_event(simulation_run, simulation_run_get_time(simulation_run) + exponential_generator((double) 1/data->packet_arrival_rate));
+  }
 }
 
 

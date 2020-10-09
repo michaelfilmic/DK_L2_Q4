@@ -122,6 +122,10 @@ main(void)
         simulation_run[0]->up_ptr = simulation_run[1];
         simulation_run[0]->down_ptr = simulation_run[2];
 
+        simulation_run[0]->type_of_arrival = 0;
+        simulation_run[1]->type_of_arrival = 0;
+        simulation_run[2]->type_of_arrival = 0;
+
         simulation_run[0]->switch_num = 1;
         simulation_run[1]->switch_num = 2;
         simulation_run[2]->switch_num = 3;
@@ -129,7 +133,7 @@ main(void)
          * Initialize the simulation_run[0] data variables, declared in main.h.
          */
         
-        data.packet_arrival_rate = PACKET_ARRIVAL_RATE_LIST[i];
+        data.packet_arrival_rate = 0.6;
         data.blip_counter = 0;
         data.arrival_count = 0;
         data.number_of_packets_processed = 0;
@@ -144,7 +148,7 @@ main(void)
         data.buffer = fifoqueue_new();
         data.link   = server_new();
 
-        data_2.packet_arrival_rate = PACKET_ARRIVAL_RATE_LIST[i];
+        data_2.packet_arrival_rate = 0.7;
         data_2.blip_counter = 0;
         data_2.arrival_count = 0;
         data_2.number_of_packets_processed = 0;
@@ -159,7 +163,7 @@ main(void)
         data_2.buffer = fifoqueue_new();
         data_2.link   = server_new();
 
-        data_3.packet_arrival_rate = PACKET_ARRIVAL_RATE_LIST[i];
+        data_3.packet_arrival_rate = 0.9;
         data_3.blip_counter = 0;
         data_3.arrival_count = 0;
         data_3.number_of_packets_processed = 0;
@@ -188,9 +192,9 @@ main(void)
         schedule_packet_arrival_event(simulation_run[0], 
                       simulation_run_get_time(simulation_run[0]));
         schedule_packet_arrival_event(simulation_run[1], 
-                      simulation_run_get_time(simulation_run[1]));
+                      simulation_run_get_time(simulation_run[0]));
         schedule_packet_arrival_event(simulation_run[2], 
-                      simulation_run_get_time(simulation_run[2]));
+                      simulation_run_get_time(simulation_run[0]));
 
         //printf("after schedule arrival event program time %f\n", clock());
         /* 
@@ -200,6 +204,8 @@ main(void)
         while(data.number_of_packets_processed < RUNLENGTH) {
 
           simulation_run_execute_event(simulation_run[0]);
+          simulation_run_execute_event(simulation_run[1]);
+          simulation_run_execute_event(simulation_run[2]);
         }
 
         /*

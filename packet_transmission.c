@@ -69,7 +69,7 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
   Packet_Ptr this_packet, next_packet;
 
 
-  TRACE(printf("End Of Packet.\n"););
+  TRACE(printf(" switch_num = %ld End Of Packet.\n", simulation_run->switch_num);)
 
   data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
 
@@ -86,6 +86,15 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
 
   /* Output activity blip every so often. */
   output_progress_msg_to_screen(simulation_run);
+
+  if (simulation_run->switch_num == 1)
+  {
+      printf("inside prob decision, sim time = %ld \n", simulation_run_get_time(simulation_run->up_ptr));
+      //schedule_packet_arrival_event(simulation_run->up_ptr,simulation_run_get_time(simulation_run->up_ptr));
+      simulation_run->up_ptr->type_of_arrival=1;
+      schedule_packet_arrival_event(simulation_run->up_ptr,simulation_run_get_time(simulation_run));
+  }
+
 
   /* This packet is done ... give the memory back. */
   xfree((void *) this_packet);
@@ -112,7 +121,7 @@ start_transmission_on_link(Simulation_Run_Ptr simulation_run,
 			   Packet_Ptr this_packet,
 			   Server_Ptr link)
 {
-  TRACE(printf("Start Of Packet.\n");)
+  TRACE(printf(" switch_num = %ld Start Of Packet.\n", simulation_run->switch_num);)
 
   server_put(link, (void*) this_packet);
   this_packet->status = XMTTING;
