@@ -44,7 +44,7 @@ schedule_packet_arrival_event(Simulation_Run_Ptr simulation_run,
 {
   Event event;
 
-  event.description = "Packet Arrival";
+  event.description = "SW1 Packet Arrival";
   event.function = packet_arrival_event;
   event.attachment = (void *) NULL;
 
@@ -115,9 +115,11 @@ packet_arrival_event(Simulation_Run_Ptr simulation_run, void * ptr)
    * interarrival times gives us Poisson process arrivals.
    */
 
-  schedule_packet_arrival_event(simulation_run,
-			simulation_run_get_time(simulation_run) +
-			exponential_generator((double) 1/data->packet_arrival_rate));
+#ifdef D_D_1_system
+  schedule_packet_arrival_event(simulation_run,simulation_run_get_time(simulation_run) + (double) 1/data->packet_arrival_rate);
+#else
+  schedule_packet_arrival_event(simulation_run,simulation_run_get_time(simulation_run) + exponential_generator((double) 1/data->packet_arrival_rate));
+#endif
 }
 
 void
@@ -150,9 +152,11 @@ packet_arrival_event_sw2(Simulation_Run_Ptr simulation_run, void * ptr)
    * interarrival times gives us Poisson process arrivals.
    */
 
-  schedule_packet_arrival_event(simulation_run,
-			simulation_run_get_time(simulation_run) +
-			exponential_generator((double) 1/data->packet_arrival_rate_2));
+#ifdef D_D_1_system
+  schedule_packet_arrival_event_sw2(simulation_run,simulation_run_get_time(simulation_run) + (double) 1/data->packet_arrival_rate_2);
+#else
+  schedule_packet_arrival_event_sw2(simulation_run,simulation_run_get_time(simulation_run) + exponential_generator((double) 1/data->packet_arrival_rate_2));
+#endif
 }
 
 void
@@ -185,8 +189,10 @@ packet_arrival_event_sw3(Simulation_Run_Ptr simulation_run, void * ptr)
    * interarrival times gives us Poisson process arrivals.
    */
 
-  schedule_packet_arrival_event(simulation_run,
-			simulation_run_get_time(simulation_run) +
-			exponential_generator((double) 1/data->packet_arrival_rate_3));
+#ifdef D_D_1_system
+  schedule_packet_arrival_event_sw3(simulation_run,simulation_run_get_time(simulation_run) + (double) 1/data->packet_arrival_rate_3);
+#else
+  schedule_packet_arrival_event_sw3(simulation_run,simulation_run_get_time(simulation_run) + exponential_generator((double) 1/data->packet_arrival_rate_3));
+#endif
 }
 

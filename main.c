@@ -117,21 +117,21 @@ main(void)
          * Initialize the simulation_run data variables, declared in main.h.
          */
         
-        data.packet_arrival_rate = PACKET_ARRIVAL_RATE_LIST[i];
+        data.packet_arrival_rate = 75;
         data.blip_counter = 0;
         data.arrival_count = 0;
         data.number_of_packets_processed = 0;
         data.accumulated_delay = 0.0;
         data.random_seed = random_seed;
      
-        data.packet_arrival_rate_2 = PACKET_ARRIVAL_RATE_LIST[i];
+        data.packet_arrival_rate_2 = 50;
         data.blip_counter_2 = 0;
         data.arrival_count_2 = 0;
         data.number_of_packets_processed_2 = 0;
         data.accumulated_delay_2 = 0.0;
         data.random_seed_2 = random_seed;
 
-        data.packet_arrival_rate_3 = PACKET_ARRIVAL_RATE_LIST[i];
+        data.packet_arrival_rate_3 = 50;
         data.blip_counter_3 = 0;
         data.arrival_count_3 = 0;
         data.number_of_packets_processed_3 = 0;
@@ -161,8 +161,9 @@ main(void)
          * Schedule the initial packet arrival for the current clock time (= 0).
          */
 
-        schedule_packet_arrival_event(simulation_run, 
-                      simulation_run_get_time(simulation_run));
+        schedule_packet_arrival_event(simulation_run, simulation_run_get_time(simulation_run));
+        schedule_packet_arrival_event_sw2(simulation_run, simulation_run_get_time(simulation_run));
+        schedule_packet_arrival_event_sw3(simulation_run, simulation_run_get_time(simulation_run));
 
         //printf("after schedule arrival event program time %f\n", clock());
         /* 
