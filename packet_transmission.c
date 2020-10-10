@@ -119,11 +119,11 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
   rand_p12 = uniform_generator();
   printf("rand_p12 %f\n", rand_p12);
   //prob to put into sw2 or sw3
-  if (rand_p12 <= 0.23) //p12 = 0.23
+  if (rand_p12 <= data->p12_cutoff) //p12 = 0.23
   {
   schedule_packet_arrival_event_sw2_only_once(simulation_run, simulation_run_get_time(simulation_run));
   }
-  else if (rand_p12 > 0.23) //p13 = 1 - 0.23
+  else if (rand_p12 > data->p12_cutoff) //p13 = 1 - 0.23
   {
   schedule_packet_arrival_event_sw3_only_once(simulation_run, simulation_run_get_time(simulation_run));
   }

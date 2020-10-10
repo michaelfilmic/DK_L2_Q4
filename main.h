@@ -35,6 +35,7 @@
 
 typedef struct _simulation_run_data_ 
 {
+  double p12_cutoff;
   Fifoqueue_Ptr buffer;
   Server_Ptr link;
   double packet_arrival_rate;

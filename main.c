@@ -59,6 +59,7 @@ main(void)
 
   unsigned RANDOM_SEEDS[] = {RANDOM_SEED_LIST, 0};
   double PACKET_ARRIVAL_RATE_LIST[] = {PACKET_ARRIVAL_RATE};
+  double P12_CUTOFF_LIST[] = {P12_CUTOFF};
   unsigned random_seed;
 
   int size_rand_seed = (sizeof(RANDOM_SEEDS)/sizeof(unsigned)) - 1;
@@ -88,7 +89,7 @@ main(void)
   #endif
 
 
-  for (int i = 0; i < (sizeof(PACKET_ARRIVAL_RATE_LIST)/sizeof(double)); i ++)
+  for (int i = 0; i < (sizeof(P12_CUTOFF_LIST)/sizeof(double)); i ++)
   {
 
       j = 0;
@@ -116,22 +117,23 @@ main(void)
         /* 
          * Initialize the simulation_run data variables, declared in main.h.
          */
+        data.p12_cutoff = P12_CUTOFF_LIST[i];
         
-        data.packet_arrival_rate = 75;
+        data.packet_arrival_rate = 750;
         data.blip_counter = 0;
         data.arrival_count = 0;
         data.number_of_packets_processed = 0;
         data.accumulated_delay = 0.0;
         data.random_seed = random_seed;
      
-        data.packet_arrival_rate_2 = 50;
+        data.packet_arrival_rate_2 = 500;
         data.blip_counter_2 = 0;
         data.arrival_count_2 = 0;
         data.number_of_packets_processed_2 = 0;
         data.accumulated_delay_2 = 0.0;
         data.random_seed_2 = random_seed;
 
-        data.packet_arrival_rate_3 = 50;
+        data.packet_arrival_rate_3 = 500;
         data.blip_counter_3 = 0;
         data.arrival_count_3 = 0;
         data.number_of_packets_processed_3 = 0;
@@ -231,6 +233,7 @@ main(void)
 
       double xmtted_fraction;
       printf("\n");
+      printf("i loop var = %f \n", P12_CUTOFF_LIST[i]);
       printf("avg Random Seed = %d \n", for_avg_acc.random_seed);
       printf("avg Packet arrival count = %ld \n", for_avg_acc.arrival_count);
     
