@@ -117,7 +117,7 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
 
   double rand_p12;
   rand_p12 = uniform_generator();
-  printf("rand_p12 %f\n", rand_p12);
+  TRACE(printf("rand_p12 %f\n", rand_p12);)
   //prob to put into sw2 or sw3
   if (rand_p12 <= data->p12_cutoff) //p12 = 0.23
   {
