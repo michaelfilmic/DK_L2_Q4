@@ -115,8 +115,19 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
   /* Output activity blip every so often. */
   output_progress_msg_to_screen(simulation_run);
 
+  double rand_p12;
+  rand_p12 = uniform_generator();
+  printf("rand_p12 %f\n", rand_p12);
   //prob to put into sw2 or sw3
+  if (rand_p12 <= 0.23) //p12 = 0.23
+  {
   schedule_packet_arrival_event_sw2_only_once(simulation_run, simulation_run_get_time(simulation_run));
+  }
+  else if (rand_p12 > 0.23) //p13 = 1 - 0.23
+  {
+  schedule_packet_arrival_event_sw3_only_once(simulation_run, simulation_run_get_time(simulation_run));
+  }
+
   
 
   /* This packet is done ... give the memory back. */
