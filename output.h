@@ -37,11 +37,13 @@
  * Function prototypes
  */
 
-void
-output_progress_msg_to_screen(Simulation_Run_Ptr);
+void output_progress_msg_to_screen(Simulation_Run_Ptr);
+void output_progress_msg_to_screen_sw2(Simulation_Run_Ptr);
+void output_progress_msg_to_screen_sw3(Simulation_Run_Ptr);
 
-void
-output_results(Simulation_Run_Ptr);
+void output_results(Simulation_Run_Ptr);
+void output_results_sw2(Simulation_Run_Ptr);
+void output_results_sw3(Simulation_Run_Ptr);
 
 /******************************************************************************/
 

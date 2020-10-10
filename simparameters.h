@@ -55,7 +55,9 @@
 
 #endif //FAST_RUN
 
-#define PACKET_XMT_TIME ((double) PACKET_LENGTH/LINK_BIT_RATE)
+#define PACKET_XMT_TIME 0.04
+#define PACKET_XMT_TIME_SW2 0.05
+#define PACKET_XMT_TIME_SW3 0.05 
 #define BLIPRATE (RUNLENGTH/1000)
 
 /******************************************************************************/

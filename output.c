@@ -56,8 +56,66 @@ output_progress_msg_to_screen(Simulation_Run_Ptr simulation_run)
 
     printf("%3.0f%% ", percentage_done);
 
-    printf("Successfully Xmtted Pkts  = %ld (Arrived Pkts = %ld) \r", 
+    printf("SW1 Successfully Xmtted Pkts  = %ld (Arrived Pkts = %ld) \n", 
 	   data->number_of_packets_processed, data->arrival_count);
+
+    fflush(stdout);
+  }
+
+}
+
+void
+output_progress_msg_to_screen_sw2(Simulation_Run_Ptr simulation_run)
+{
+  double percentage_done;
+  Simulation_Run_Data_Ptr data;
+
+  data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
+
+  data->blip_counter_2++;
+
+  if((data->blip_counter_2 >= BLIPRATE)
+     ||
+     (data->number_of_packets_processed_2 >= RUNLENGTH)) {
+
+    data->blip_counter_2 = 0;
+
+    percentage_done =
+      100 * (double) data->number_of_packets_processed_2/RUNLENGTH;
+
+    printf("%3.0f%% ", percentage_done);
+
+    printf("SW2 Successfully Xmtted Pkts  = %ld (Arrived Pkts = %ld) \n", 
+	   data->number_of_packets_processed_2, data->arrival_count_2);
+
+    fflush(stdout);
+  }
+
+}
+
+void
+output_progress_msg_to_screen_sw3(Simulation_Run_Ptr simulation_run)
+{
+  double percentage_done;
+  Simulation_Run_Data_Ptr data;
+
+  data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
+
+  data->blip_counter_3++;
+
+  if((data->blip_counter_3 >= BLIPRATE)
+     ||
+     (data->number_of_packets_processed_3 >= RUNLENGTH)) {
+
+    data->blip_counter_3 = 0;
+
+    percentage_done =
+      100 * (double) data->number_of_packets_processed_3/RUNLENGTH;
+
+    printf("%3.0f%% ", percentage_done);
+
+    printf("SW3 Successfully Xmtted Pkts  = %ld (Arrived Pkts = %ld) \n", 
+	   data->number_of_packets_processed_3, data->arrival_count_3);
 
     fflush(stdout);
   }
@@ -78,6 +136,7 @@ output_results(Simulation_Run_Ptr simulation_run)
   data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
 
   printf("\n");
+  printf("SW1: \n");
   printf("Random Seed = %d \n", data->random_seed);
   printf("Packet arrival count = %ld \n", data->arrival_count);
 
@@ -130,5 +189,57 @@ output_results(Simulation_Run_Ptr simulation_run)
   #endif
 }
 
+void
+output_results_sw2(Simulation_Run_Ptr simulation_run)
+{
+  double xmtted_fraction;
+  Simulation_Run_Data_Ptr data;
 
+  data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
+
+  printf("\n");
+  printf("SW2: \n");
+  printf("Random Seed = %d \n", data->random_seed_2);
+  printf("Packet arrival count = %ld \n", data->arrival_count_2);
+
+  xmtted_fraction = (double) data->number_of_packets_processed_2 /
+    data->arrival_count_2;
+
+  printf("Transmitted packet count  = %ld (Service Fraction = %.5f)\n",
+	 data->number_of_packets_processed_2, xmtted_fraction);
+
+  printf("Arrival rate = %.3f packets/second \n", (double) data->packet_arrival_rate_2);
+
+  printf("Mean Delay (msec) = %f \n",
+	 1e3*data->accumulated_delay_2/data->number_of_packets_processed_2);
+
+  printf("\n");
+}
+
+void
+output_results_sw3(Simulation_Run_Ptr simulation_run)
+{
+  double xmtted_fraction;
+  Simulation_Run_Data_Ptr data;
+
+  data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
+
+  printf("\n");
+  printf("SW3: \n");
+  printf("Random Seed = %d \n", data->random_seed_3);
+  printf("Packet arrival count = %ld \n", data->arrival_count_3);
+
+  xmtted_fraction = (double) data->number_of_packets_processed_3 /
+    data->arrival_count_3;
+
+  printf("Transmitted packet count  = %ld (Service Fraction = %.5f)\n",
+	 data->number_of_packets_processed_3, xmtted_fraction);
+
+  printf("Arrival rate = %.3f packets/second \n", (double) data->packet_arrival_rate_3);
+
+  printf("Mean Delay (msec) = %f \n",
+	 1e3*data->accumulated_delay_3/data->number_of_packets_processed_3);
+
+  printf("\n");
+}
 

@@ -44,8 +44,9 @@ void end_packet_transmission_event(Simulation_Run_Ptr, void*);
 void end_packet_transmission_event_sw2(Simulation_Run_Ptr, void*);
 void end_packet_transmission_event_sw3(Simulation_Run_Ptr, void*);
 
-double
-get_packet_transmission_time(void);
+double get_packet_transmission_time(void);
+double get_packet_transmission_time_sw2(void);
+double get_packet_transmission_time_sw3(void);
 
 /******************************************************************************/
 

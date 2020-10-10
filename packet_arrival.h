@@ -39,6 +39,8 @@
 void packet_arrival_event(Simulation_Run_Ptr, void*);
 void packet_arrival_event_sw2(Simulation_Run_Ptr, void*);
 void packet_arrival_event_sw3(Simulation_Run_Ptr, void*);
+void packet_arrival_event_sw2_only_once(Simulation_Run_Ptr, void*);
+void packet_arrival_event_sw3_only_once(Simulation_Run_Ptr, void*);
 
 long
 schedule_packet_arrival_event(Simulation_Run_Ptr, double);

@@ -115,6 +115,10 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
   /* Output activity blip every so often. */
   output_progress_msg_to_screen(simulation_run);
 
+  //prob to put into sw2 or sw3
+  schedule_packet_arrival_event_sw2_only_once(simulation_run, simulation_run_get_time(simulation_run));
+  
+
   /* This packet is done ... give the memory back. */
   xfree((void *) this_packet);
 
@@ -151,7 +155,7 @@ end_packet_transmission_event_sw2(Simulation_Run_Ptr simulation_run, void * link
     this_packet->arrive_time;
 
   /* Output activity blip every so often. */
-  output_progress_msg_to_screen(simulation_run);
+  output_progress_msg_to_screen_sw2(simulation_run);
 
   /* This packet is done ... give the memory back. */
   xfree((void *) this_packet);
@@ -190,7 +194,7 @@ end_packet_transmission_event_sw3(Simulation_Run_Ptr simulation_run, void * link
     this_packet->arrive_time;
 
   /* Output activity blip every so often. */
-  output_progress_msg_to_screen(simulation_run);
+  output_progress_msg_to_screen_sw3(simulation_run);
 
   /* This packet is done ... give the memory back. */
   xfree((void *) this_packet);
@@ -263,10 +267,18 @@ start_transmission_on_link_sw3(Simulation_Run_Ptr simulation_run,
  * simparameters.h
  */
 
-double
-get_packet_transmission_time(void)
+double get_packet_transmission_time(void)
 {
   return ((double) PACKET_XMT_TIME);
 }
 
+double get_packet_transmission_time_sw2(void)
+{
+  return ((double) PACKET_XMT_TIME_SW2);
+}
+
+double get_packet_transmission_time_sw3(void)
+{
+  return ((double) PACKET_XMT_TIME_SW3);
+}
 
