@@ -144,7 +144,7 @@ packet_arrival_event_sw2(Simulation_Run_Ptr simulation_run, void * ptr)
   if(server_state(data->link_2) == BUSY) {
     fifoqueue_put(data->buffer_2, (void*) new_packet);
   } else {
-    start_transmission_on_link(simulation_run, new_packet, data->link_2);
+    start_transmission_on_link_sw2(simulation_run, new_packet, data->link_2);
   }
 
   /* 
@@ -181,7 +181,7 @@ packet_arrival_event_sw3(Simulation_Run_Ptr simulation_run, void * ptr)
   if(server_state(data->link_3) == BUSY) {
     fifoqueue_put(data->buffer_3, (void*) new_packet);
   } else {
-    start_transmission_on_link(simulation_run, new_packet, data->link_3);
+    start_transmission_on_link_sw3(simulation_run, new_packet, data->link_3);
   }
 
   /* 
