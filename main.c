@@ -70,7 +70,7 @@ main(void)
   #ifndef NO_CSV_OUTPUT
   // create a csv file
   FILE* fp;
-  char data_set_name[] = "./Q2.csv";
+  char data_set_name[] = "./Q4.csv";
   //file IO
 
   fp = fopen(data_set_name, "w");
@@ -83,7 +83,22 @@ main(void)
   fprintf(fp, ("Service Fraction ,"));
   fprintf(fp, ("Arrival rate,"));
   fprintf(fp, ("Mean Delay (msec),"));
+//sw2
+  fprintf(fp, ("Random Seed,"));
+  fprintf(fp, ("Packet arrival count,"));
 
+  fprintf(fp, ("Transmitted packet count ,"));
+  fprintf(fp, ("Service Fraction ,"));
+  fprintf(fp, ("Arrival rate,"));
+  fprintf(fp, ("Mean Delay (msec),"));
+//sw3
+  fprintf(fp, ("Random Seed,"));
+  fprintf(fp, ("Packet arrival count,"));
+
+  fprintf(fp, ("Transmitted packet count ,"));
+  fprintf(fp, ("Service Fraction ,"));
+  fprintf(fp, ("Arrival rate,"));
+  fprintf(fp, ("Mean Delay (msec),"));
   fprintf(fp, "\n");
   fclose(fp);
   #endif
@@ -102,6 +117,19 @@ main(void)
       for_avg_acc.accumulated_delay = 0;
       for_avg_acc.random_seed = 0;
 
+      for_avg_acc.packet_arrival_rate_2 = 0;
+      for_avg_acc.blip_counter_2 = 0;
+      for_avg_acc.arrival_count_2 = 0;
+      for_avg_acc.number_of_packets_processed_2 = 0;
+      for_avg_acc.accumulated_delay_2 = 0;
+      for_avg_acc.random_seed_2 = 0;
+
+      for_avg_acc.packet_arrival_rate_3 = 0;
+      for_avg_acc.blip_counter_3 = 0;
+      for_avg_acc.arrival_count_3 = 0;
+      for_avg_acc.number_of_packets_processed_3 = 0;
+      for_avg_acc.accumulated_delay_3 = 0;
+      for_avg_acc.random_seed_3 = 0;
 
       while (random_seed != 0) {
      
@@ -172,7 +200,13 @@ main(void)
          * Execute events until we are finished. 
          */
 
-        while(data.number_of_packets_processed < RUNLENGTH) {
+        //while(data.number_of_packets_processed < RUNLENGTH) {
+        while(
+                data.number_of_packets_processed < RUNLENGTH ||
+                data.number_of_packets_processed_2 < RUNLENGTH ||
+                data.number_of_packets_processed_3 < RUNLENGTH || 
+                0 //dummy var to keep format
+                ) {
           //printf("MM_debug while loop program time \n");
           simulation_run_execute_event(simulation_run);
         }
@@ -182,6 +216,8 @@ main(void)
          */
 
         output_results(simulation_run);
+        output_results_sw2(simulation_run);
+        output_results_sw3(simulation_run);
 
         for_avg_acc.packet_arrival_rate += data.packet_arrival_rate;
         for_avg_acc.blip_counter += data.blip_counter;
@@ -189,6 +225,20 @@ main(void)
         for_avg_acc.number_of_packets_processed += data.number_of_packets_processed;
         for_avg_acc.accumulated_delay += data.accumulated_delay;
         for_avg_acc.random_seed += data.random_seed;
+
+        for_avg_acc.packet_arrival_rate_2 += data.packet_arrival_rate_2;
+        for_avg_acc.blip_counter_2 += data.blip_counter_2;
+        for_avg_acc.arrival_count_2 += data.arrival_count_2;
+        for_avg_acc.number_of_packets_processed_2 += data.number_of_packets_processed_2;
+        for_avg_acc.accumulated_delay_2 += data.accumulated_delay_2;
+        for_avg_acc.random_seed_2 += data.random_seed_2;
+
+        for_avg_acc.packet_arrival_rate_3 += data.packet_arrival_rate_3;
+        for_avg_acc.blip_counter_3 += data.blip_counter_3;
+        for_avg_acc.arrival_count_3 += data.arrival_count_3;
+        for_avg_acc.number_of_packets_processed_3 += data.number_of_packets_processed_3;
+        for_avg_acc.accumulated_delay_3 += data.accumulated_delay_3;
+        for_avg_acc.random_seed_3 += data.random_seed_3;
 
         cleanup_memory(simulation_run);
 
@@ -203,7 +253,19 @@ main(void)
       for_avg_acc.accumulated_delay /= size_rand_seed;
       for_avg_acc.random_seed /= size_rand_seed;
 
+      for_avg_acc.packet_arrival_rate_2 /= size_rand_seed;
+      for_avg_acc.blip_counter_2 /= size_rand_seed;
+      for_avg_acc.arrival_count_2 /= size_rand_seed;
+      for_avg_acc.number_of_packets_processed_2 /= size_rand_seed;
+      for_avg_acc.accumulated_delay_2 /= size_rand_seed;
+      for_avg_acc.random_seed_2 /= size_rand_seed;
 
+      for_avg_acc.packet_arrival_rate_3 /= size_rand_seed;
+      for_avg_acc.blip_counter_3 /= size_rand_seed;
+      for_avg_acc.arrival_count_3 /= size_rand_seed;
+      for_avg_acc.number_of_packets_processed_3 /= size_rand_seed;
+      for_avg_acc.accumulated_delay_3 /= size_rand_seed;
+      for_avg_acc.random_seed_3 /= size_rand_seed;
   #ifndef NO_CSV_OUTPUT
       fp = fopen(data_set_name, "a");
       //cell/element name/type
@@ -224,30 +286,91 @@ main(void)
       fprintf(fp, "%.3f, ", (double) for_avg_acc.packet_arrival_rate);
 
       //fprintf(fp, ("Mean Delay (msec),"));
-      fprintf(fp, "%f, ",
-         1e3*for_avg_acc.accumulated_delay/for_avg_acc.number_of_packets_processed);
+      fprintf(fp, "%f, ",1e3*for_avg_acc.accumulated_delay/for_avg_acc.number_of_packets_processed);
 
+  //sw2
+      //fprintf(fp, ("Random Seed,"));
+      fprintf(fp, "%d,", i);
+
+      //fprintf(fp, ("Packet arrival count,")_2);
+      fprintf(fp, "%ld, ", for_avg_acc.arrival_count_2);
+
+      //fprintf(fp, ("Transmitted packet count ,")_2);
+      fprintf(fp, "%ld,", for_avg_acc.number_of_packets_processed_2);
+
+      //fprintf(fp, ("Service Fraction ,")_2);
+      fprintf(fp, "%.5f,", (double) for_avg_acc.number_of_packets_processed_2 /for_avg_acc.arrival_count_2);
+
+      //fprintf(fp, ("Arrival rate,")_2);
+      fprintf(fp, "%.3f, ", (double) for_avg_acc.packet_arrival_rate_2);
+
+      //fprintf(fp, ("Mean Delay (msec),")_2);
+      fprintf(fp, "%f, ",1e3*for_avg_acc.accumulated_delay_2/for_avg_acc.number_of_packets_processed_2);
+
+  //sw3
+      //fprintf(fp, ("Random Seed,"));
+      fprintf(fp, "%d,", i);
+
+      //fprintf(fp, ("Packet arrival count,")_3);
+      fprintf(fp, "%ld, ", for_avg_acc.arrival_count_3);
+
+      //fprintf(fp, ("Transmitted packet count ,")_3);
+      fprintf(fp, "%ld,", for_avg_acc.number_of_packets_processed_3);
+
+      //fprintf(fp, ("Service Fraction ,")_3);
+      fprintf(fp, "%.5f,", (double) for_avg_acc.number_of_packets_processed_3 /for_avg_acc.arrival_count_3);
+
+      //fprintf(fp, ("Arrival rate,")_3);
+      fprintf(fp, "%.3f, ", (double) for_avg_acc.packet_arrival_rate_3);
+
+      //fprintf(fp, ("Mean Delay (msec),")_3);
+      fprintf(fp, "%f, ",1e3*for_avg_acc.accumulated_delay_3/for_avg_acc.number_of_packets_processed_3);
       fprintf(fp, "\n");
       fclose(fp);
   #endif
 
       double xmtted_fraction;
+      double xmtted_fraction_2;
+      double xmtted_fraction_3;
       printf("\n");
       printf("i loop var = %f \n", P12_CUTOFF_LIST[i]);
+      printf("\nsw1 \n");
       printf("avg Random Seed = %d \n", for_avg_acc.random_seed);
       printf("avg Packet arrival count = %ld \n", for_avg_acc.arrival_count);
     
-      xmtted_fraction = (double) for_avg_acc.number_of_packets_processed /
-        for_avg_acc.arrival_count;
+      xmtted_fraction = (double) for_avg_acc.number_of_packets_processed /for_avg_acc.arrival_count;
     
-      printf("avg Transmitted packet count  = %ld (Service Fraction = %.5f)\n",
-         for_avg_acc.number_of_packets_processed, xmtted_fraction);
+      printf("avg Transmitted packet count  = %ld (Service Fraction = %.5f)\n", for_avg_acc.number_of_packets_processed, xmtted_fraction);
     
       printf("avg Arrival rate = %.3f packets/second \n", (double) for_avg_acc.packet_arrival_rate);
     
-      printf("avg Mean Delay (msec) = %f \n",
-         1e3*for_avg_acc.accumulated_delay/for_avg_acc.number_of_packets_processed);
+      printf("avg Mean Delay (msec) = %f \n",1e3*for_avg_acc.accumulated_delay/for_avg_acc.number_of_packets_processed);
     
+  //sw2
+      printf("\nsw2 \n");
+      printf("avg Random Seed = %d \n", for_avg_acc.random_seed_2);
+      printf("avg Packet arrival count = %ld \n", for_avg_acc.arrival_count_2);
+    
+      xmtted_fraction_2 = (double) for_avg_acc.number_of_packets_processed_2 /for_avg_acc.arrival_count_2;
+    
+      printf("avg Transmitted packet count  = %ld (Service Fraction = %.5f)\n", for_avg_acc.number_of_packets_processed_2, xmtted_fraction_2);
+    
+      printf("avg Arrival rate = %.3f packets/second \n", (double) for_avg_acc.packet_arrival_rate_2);
+    
+      printf("avg Mean Delay (msec) = %f \n",1e3*for_avg_acc.accumulated_delay_2/for_avg_acc.number_of_packets_processed_2);
+
+  //sw3
+      printf("\nsw3 \n");
+      printf("avg Random Seed = %d \n", for_avg_acc.random_seed_3);
+      printf("avg Packet arrival count = %ld \n", for_avg_acc.arrival_count_3);
+    
+      xmtted_fraction_3 = (double) for_avg_acc.number_of_packets_processed_3 /for_avg_acc.arrival_count_3;
+    
+      printf("avg Transmitted packet count  = %ld (Service Fraction = %.5f)\n", for_avg_acc.number_of_packets_processed_3, xmtted_fraction_3);
+    
+      printf("avg Arrival rate = %.3f packets/second \n", (double) for_avg_acc.packet_arrival_rate_3);
+    
+      printf("avg Mean Delay (msec) = %f \n",1e3*for_avg_acc.accumulated_delay_3/for_avg_acc.number_of_packets_processed_3);
       printf("\n");
 
   }
