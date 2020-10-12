@@ -38,10 +38,10 @@
 
 #ifdef FAST_RUN
 
-#define P12_CUTOFF 0.99
+#define P12_CUTOFF 0.5
 
 #define PACKET_LENGTH 1000 /* bits */
-#define RUNLENGTH 1000 /* packets */
+#define RUNLENGTH 1E3 /* packets */
 #define RANDOM_SEED_LIST 400050636
 
 #else

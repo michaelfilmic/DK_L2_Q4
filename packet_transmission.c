@@ -297,7 +297,15 @@ end_packet_transmission_event_sw2_only_once(Simulation_Run_Ptr simulation_run, v
 
   if(fifoqueue_size(data->buffer_2) > 0) {
     next_packet = (Packet_Ptr) fifoqueue_get(data->buffer_2);
+    if (next_packet->source_id != 1)
+    {
+    start_transmission_on_link_sw2(simulation_run, next_packet, link);
+    }
+    else
+    {
     start_transmission_on_link_sw2_only_once(simulation_run, next_packet, link);
+
+    }
   }
 }
 
@@ -336,7 +344,15 @@ end_packet_transmission_event_sw3_only_once(Simulation_Run_Ptr simulation_run, v
 
   if(fifoqueue_size(data->buffer_3) > 0) {
     next_packet = (Packet_Ptr) fifoqueue_get(data->buffer_3);
+    if (next_packet->source_id != 1)
+    {
     start_transmission_on_link_sw3(simulation_run, next_packet, link);
+    }
+    else
+    {
+    start_transmission_on_link_sw3_only_once(simulation_run, next_packet, link);
+
+    }
   }
 }
 /*
