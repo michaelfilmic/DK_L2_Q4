@@ -147,21 +147,21 @@ main(void)
          */
         data.p12_cutoff = P12_CUTOFF_LIST[i];
         
-        data.packet_arrival_rate = 750;
+        data.packet_arrival_rate = PACKET_ARRIVAL_RATE;
         data.blip_counter = 0;
         data.arrival_count = 0;
         data.number_of_packets_processed = 0;
         data.accumulated_delay = 0.0;
         data.random_seed = random_seed;
      
-        data.packet_arrival_rate_2 = 500;
+        data.packet_arrival_rate_2 = PACKET_ARRIVAL_RATE_SW2;
         data.blip_counter_2 = 0;
         data.arrival_count_2 = 0;
         data.number_of_packets_processed_2 = 0;
         data.accumulated_delay_2 = 0.0;
         data.random_seed_2 = random_seed;
 
-        data.packet_arrival_rate_3 = 500;
+        data.packet_arrival_rate_3 = PACKET_ARRIVAL_RATE_SW3;
         data.blip_counter_3 = 0;
         data.arrival_count_3 = 0;
         data.number_of_packets_processed_3 = 0;
@@ -203,8 +203,8 @@ main(void)
         //while(data.number_of_packets_processed < RUNLENGTH) {
         while(
                 data.number_of_packets_processed < RUNLENGTH ||
-                data.number_of_packets_processed_2 < RUNLENGTH ||
-                data.number_of_packets_processed_3 < RUNLENGTH || 
+//                data.number_of_packets_processed_2 < RUNLENGTH ||
+//                data.number_of_packets_processed_3 < RUNLENGTH || 
                 0 //dummy var to keep format
                 ) {
           //printf("MM_debug while loop program time \n");
@@ -344,6 +344,7 @@ main(void)
     
       printf("avg Arrival rate = %.3f packets/second \n", (double) for_avg_acc.packet_arrival_rate);
     
+      printf("accumulated_delay (msec) = %f \n",1e3*for_avg_acc.accumulated_delay);
       printf("avg Mean Delay (msec) = %f \n",1e3*for_avg_acc.accumulated_delay/for_avg_acc.number_of_packets_processed);
     
   //sw2

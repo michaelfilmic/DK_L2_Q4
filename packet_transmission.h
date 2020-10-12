@@ -39,10 +39,14 @@
 void start_transmission_on_link(Simulation_Run_Ptr, Packet_Ptr, Server_Ptr);
 void start_transmission_on_link_sw2(Simulation_Run_Ptr, Packet_Ptr, Server_Ptr);
 void start_transmission_on_link_sw3(Simulation_Run_Ptr, Packet_Ptr, Server_Ptr);
+void start_transmission_on_link_sw2_only_once(Simulation_Run_Ptr, Packet_Ptr, Server_Ptr);
+void start_transmission_on_link_sw3_only_once(Simulation_Run_Ptr, Packet_Ptr, Server_Ptr);
 
 void end_packet_transmission_event(Simulation_Run_Ptr, void*);
 void end_packet_transmission_event_sw2(Simulation_Run_Ptr, void*);
 void end_packet_transmission_event_sw3(Simulation_Run_Ptr, void*);
+void end_packet_transmission_event_sw2_only_once(Simulation_Run_Ptr, void*);
+void end_packet_transmission_event_sw3_only_once(Simulation_Run_Ptr, void*);
 
 double get_packet_transmission_time(void);
 double get_packet_transmission_time_sw2(void);

@@ -82,6 +82,35 @@ schedule_end_packet_transmission_event_sw3(Simulation_Run_Ptr simulation_run,
 
   return simulation_run_schedule_event(simulation_run, event, event_time);
 }
+long
+schedule_end_packet_transmission_event_sw2_only_once(Simulation_Run_Ptr simulation_run,
+				       double event_time,
+				       Server_Ptr link)
+{
+  Event event;
+
+  //TRACE(printf("MM_debug in schedule_end_packet_transmission_event.\n");)
+  event.description = "from SW1 on SW2 Packet Xmt End";
+  event.function = end_packet_transmission_event_sw2_only_once;
+  event.attachment = (void *) link;
+
+  return simulation_run_schedule_event(simulation_run, event, event_time);
+}
+
+long
+schedule_end_packet_transmission_event_sw3_only_once(Simulation_Run_Ptr simulation_run,
+				       double event_time,
+				       Server_Ptr link)
+{
+  Event event;
+
+  //TRACE(printf("MM_debug in schedule_end_packet_transmission_event.\n");)
+  event.description = "from SW1 on SW3 Packet Xmt End";
+  event.function = end_packet_transmission_event_sw3_only_once;
+  event.attachment = (void *) link;
+
+  return simulation_run_schedule_event(simulation_run, event, event_time);
+}
 /******************************************************************************/
 
 /*
@@ -108,9 +137,12 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
   this_packet = (Packet_Ptr) server_get(link);
 
   /* Collect statistics. */
-  data->number_of_packets_processed++;
-  data->accumulated_delay += simulation_run_get_time(simulation_run) - 
-    this_packet->arrive_time;
+  //data->number_of_packets_processed++;
+  printf("sim time (msec) = %f \n",simulation_run_get_time(simulation_run)); 
+  printf("ariive time (msec) = %f \n", this_packet->arrive_time); 
+  printf("each packet_delay (msec) = %f \n",simulation_run_get_time(simulation_run) - this_packet->arrive_time);
+  //data->accumulated_delay += simulation_run_get_time(simulation_run) - this_packet->arrive_time;
+  this_packet->source_id = 1;
 
   /* Output activity blip every so often. */
   output_progress_msg_to_screen(simulation_run);
@@ -121,17 +153,12 @@ end_packet_transmission_event(Simulation_Run_Ptr simulation_run, void * link)
   //prob to put into sw2 or sw3
   if (rand_p12 <= data->p12_cutoff) //p12 = 0.23
   {
-  schedule_packet_arrival_event_sw2_only_once(simulation_run, simulation_run_get_time(simulation_run));
+  schedule_packet_arrival_event_sw2_only_once(simulation_run, simulation_run_get_time(simulation_run), this_packet);
   }
   else if (rand_p12 > data->p12_cutoff) //p13 = 1 - 0.23
   {
-  schedule_packet_arrival_event_sw3_only_once(simulation_run, simulation_run_get_time(simulation_run));
+  schedule_packet_arrival_event_sw3_only_once(simulation_run, simulation_run_get_time(simulation_run), this_packet);
   }
-
-  
-
-  /* This packet is done ... give the memory back. */
-  xfree((void *) this_packet);
 
   /* 
    * See if there is are packets waiting in the buffer. If so, take the next one
@@ -178,7 +205,15 @@ end_packet_transmission_event_sw2(Simulation_Run_Ptr simulation_run, void * link
 
   if(fifoqueue_size(data->buffer_2) > 0) {
     next_packet = (Packet_Ptr) fifoqueue_get(data->buffer_2);
+    if (next_packet->source_id != 1)
+    {
     start_transmission_on_link_sw2(simulation_run, next_packet, link);
+    }
+    else
+    {
+    start_transmission_on_link_sw2_only_once(simulation_run, next_packet, link);
+
+    }
   }
 }
 
@@ -202,6 +237,90 @@ end_packet_transmission_event_sw3(Simulation_Run_Ptr simulation_run, void * link
   /* Collect statistics. */
   data->number_of_packets_processed_3++;
   data->accumulated_delay_3 += simulation_run_get_time(simulation_run) - 
+    this_packet->arrive_time;
+
+  /* Output activity blip every so often. */
+  output_progress_msg_to_screen_sw3(simulation_run);
+
+  /* This packet is done ... give the memory back. */
+  xfree((void *) this_packet);
+
+  /* 
+   * See if there is are packets waiting in the buffer. If so, take the next one
+   * out and transmit it immediately.
+  */
+
+  if(fifoqueue_size(data->buffer_3) > 0) {
+    next_packet = (Packet_Ptr) fifoqueue_get(data->buffer_3);
+    if (next_packet->source_id != 1)
+    {
+    start_transmission_on_link_sw3(simulation_run, next_packet, link);
+    }
+    else
+    {
+    start_transmission_on_link_sw3_only_once(simulation_run, next_packet, link);
+
+    }
+  }
+}
+void
+end_packet_transmission_event_sw2_only_once(Simulation_Run_Ptr simulation_run, void * link)
+{
+  Simulation_Run_Data_Ptr data;
+  Packet_Ptr this_packet, next_packet;
+
+  TRACE(printf("from SW1 on SW2 End Of Packet.\n"););
+
+  data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
+
+  /* 
+   * Packet transmission is finished. Take the packet off the data link.
+   */
+
+  this_packet = (Packet_Ptr) server_get(link);
+
+  /* Collect statistics. */
+  data->number_of_packets_processed++;
+  data->accumulated_delay += simulation_run_get_time(simulation_run) - 
+    this_packet->arrive_time;
+
+  /* Output activity blip every so often. */
+  output_progress_msg_to_screen_sw2(simulation_run);
+
+  /* This packet is done ... give the memory back. */
+  xfree((void *) this_packet);
+
+  /* 
+   * See if there is are packets waiting in the buffer. If so, take the next one
+   * out and transmit it immediately.
+  */
+
+  if(fifoqueue_size(data->buffer_2) > 0) {
+    next_packet = (Packet_Ptr) fifoqueue_get(data->buffer_2);
+    start_transmission_on_link_sw2_only_once(simulation_run, next_packet, link);
+  }
+}
+
+void
+end_packet_transmission_event_sw3_only_once(Simulation_Run_Ptr simulation_run, void * link)
+{
+  Simulation_Run_Data_Ptr data;
+  Packet_Ptr this_packet, next_packet;
+
+  //TRACE(printf("MM_debug in end_packet_transmission_event.\n");)
+  TRACE(printf("from SW1 on SW3 End Of Packet.\n"););
+
+  data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
+
+  /* 
+   * Packet transmission is finished. Take the packet off the data link.
+   */
+
+  this_packet = (Packet_Ptr) server_get(link);
+
+  /* Collect statistics. */
+  data->number_of_packets_processed++;
+  data->accumulated_delay += simulation_run_get_time(simulation_run) - 
     this_packet->arrive_time;
 
   /* Output activity blip every so often. */
@@ -270,6 +389,37 @@ start_transmission_on_link_sw3(Simulation_Run_Ptr simulation_run,
 
   /* Schedule the end of packet transmission event. */
   schedule_end_packet_transmission_event_sw3(simulation_run,
+	 simulation_run_get_time(simulation_run) + this_packet->service_time,
+	 (void *) link);
+}
+void
+start_transmission_on_link_sw2_only_once(Simulation_Run_Ptr simulation_run, 
+			   Packet_Ptr this_packet,
+			   Server_Ptr link)
+{
+  TRACE(printf("from SW1 packet on SW2 Start Of Packet.\n");)
+
+  server_put(link, (void*) this_packet);
+  this_packet->status = XMTTING;
+
+  /* Schedule the end of packet transmission event. */
+  schedule_end_packet_transmission_event_sw2_only_once(simulation_run,
+	 simulation_run_get_time(simulation_run) + this_packet->service_time,
+	 (void *) link);
+}
+
+void
+start_transmission_on_link_sw3_only_once(Simulation_Run_Ptr simulation_run, 
+			   Packet_Ptr this_packet,
+			   Server_Ptr link)
+{
+  TRACE(printf("from SW1 packet on SW3 Start Of Packet.\n");)
+
+  server_put(link, (void*) this_packet);
+  this_packet->status = XMTTING;
+
+  /* Schedule the end of packet transmission event. */
+  schedule_end_packet_transmission_event_sw3_only_once(simulation_run,
 	 simulation_run_get_time(simulation_run) + this_packet->service_time,
 	 (void *) link);
 }

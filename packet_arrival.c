@@ -78,27 +78,26 @@ schedule_packet_arrival_event_sw3(Simulation_Run_Ptr simulation_run,
 }
 
 long int
-schedule_packet_arrival_event_sw2_only_once(Simulation_Run_Ptr simulation_run,
-			      double event_time)
+schedule_packet_arrival_event_sw2_only_once(Simulation_Run_Ptr simulation_run, double event_time, Packet_Ptr packet)
 {
   Event event;
 
   event.description = "from SW1 only once SW2 Packet Arrival";
   event.function = packet_arrival_event_sw2_only_once;
-  event.attachment = (void *) NULL;
+  event.attachment = (Packet_Ptr *) packet;
 
   return simulation_run_schedule_event(simulation_run, event, event_time);
 }
 
 long int
-schedule_packet_arrival_event_sw3_only_once(Simulation_Run_Ptr simulation_run,
-			      double event_time)
+schedule_packet_arrival_event_sw3_only_once(Simulation_Run_Ptr simulation_run, double event_time, Packet_Ptr packet)
 {
   Event event;
 
   event.description = "from SW1 only once SW3 Packet Arrival";
   event.function = packet_arrival_event_sw3_only_once;
-  event.attachment = (void *) NULL;
+  //event.attachment = (void *) NULL;
+  event.attachment = (Packet_Ptr *) packet;
 
   return simulation_run_schedule_event(simulation_run, event, event_time);
 }
@@ -158,6 +157,7 @@ packet_arrival_event_sw2(Simulation_Run_Ptr simulation_run, void * ptr)
   data->arrival_count_2++;
 
   new_packet = (Packet_Ptr) xmalloc(sizeof(Packet));
+  new_packet->source_id = 2;
   new_packet->arrive_time = simulation_run_get_time(simulation_run);
   new_packet->service_time = get_packet_transmission_time_sw2();
   
@@ -198,6 +198,7 @@ packet_arrival_event_sw3(Simulation_Run_Ptr simulation_run, void * ptr)
   data->arrival_count_3++;
 
   new_packet = (Packet_Ptr) xmalloc(sizeof(Packet));
+  new_packet->source_id = 3;
   new_packet->arrive_time = simulation_run_get_time(simulation_run);
   new_packet->service_time = get_packet_transmission_time_sw3();
   new_packet->status = WAITING;
@@ -229,15 +230,21 @@ void
 packet_arrival_event_sw2_only_once(Simulation_Run_Ptr simulation_run, void * ptr)
 {
   Simulation_Run_Data_Ptr data;
-  Packet_Ptr new_packet;
+  Packet_Ptr sw1_packet;
+  sw1_packet = ptr;
 
   data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
-  data->arrival_count_2++;
+  //data->arrival_count_2++;
+  if (sw1_packet->source_id != 1)
+  {
+      printf("Error source_id not eq 1 ! \n"); 
+  }
 
-  new_packet = (Packet_Ptr) xmalloc(sizeof(Packet));
-  new_packet->arrive_time = simulation_run_get_time(simulation_run);
-  new_packet->service_time = get_packet_transmission_time_sw2();
-  new_packet->status = WAITING;
+  //sw1_packet = (Packet_Ptr) xmalloc(sizeof(Packet));
+  //sw1_packet->arrive_time = simulation_run_get_time(simulation_run);
+  sw1_packet->source_id = 1;
+  sw1_packet->service_time = get_packet_transmission_time_sw2();
+  sw1_packet->status = WAITING;
 
   /* 
    * Start transmission if the data link is free. Otherwise put the packet into
@@ -245,9 +252,9 @@ packet_arrival_event_sw2_only_once(Simulation_Run_Ptr simulation_run, void * ptr
    */
 
   if(server_state(data->link_2) == BUSY) {
-    fifoqueue_put(data->buffer_2, (void*) new_packet);
+    fifoqueue_put(data->buffer_2, (void*) sw1_packet);
   } else {
-    start_transmission_on_link_sw2(simulation_run, new_packet, data->link_2);
+    start_transmission_on_link_sw2_only_once(simulation_run, sw1_packet, data->link_2);
   }
 
   /* 
@@ -260,15 +267,21 @@ void
 packet_arrival_event_sw3_only_once(Simulation_Run_Ptr simulation_run, void * ptr)
 {
   Simulation_Run_Data_Ptr data;
-  Packet_Ptr new_packet;
+  Packet_Ptr sw1_packet;
+  sw1_packet = ptr;
 
   data = (Simulation_Run_Data_Ptr) simulation_run_data(simulation_run);
-  data->arrival_count_3++;
+  //data->arrival_count_3++;
+  if (sw1_packet->source_id != 1)
+  {
+      printf("Error source_id not eq 1 ! \n"); 
+  }
 
-  new_packet = (Packet_Ptr) xmalloc(sizeof(Packet));
-  new_packet->arrive_time = simulation_run_get_time(simulation_run);
-  new_packet->service_time = get_packet_transmission_time_sw3();
-  new_packet->status = WAITING;
+  //sw1_packet = (Packet_Ptr) xmalloc(sizeof(Packet));
+  sw1_packet->source_id = 1;
+  //sw1_packet->arrive_time = simulation_run_get_time(simulation_run);
+  sw1_packet->service_time = get_packet_transmission_time_sw3();
+  sw1_packet->status = WAITING;
 
   /* 
    * Start transmission if the data link is free. Otherwise put the packet into
@@ -276,9 +289,9 @@ packet_arrival_event_sw3_only_once(Simulation_Run_Ptr simulation_run, void * ptr
    */
 
   if(server_state(data->link_3) == BUSY) {
-    fifoqueue_put(data->buffer_3, (void*) new_packet);
+    fifoqueue_put(data->buffer_3, (void*) sw1_packet);
   } else {
-    start_transmission_on_link_sw3(simulation_run, new_packet, data->link_3);
+    start_transmission_on_link_sw3_only_once(simulation_run, sw1_packet, data->link_3);
   }
 
   /* 
