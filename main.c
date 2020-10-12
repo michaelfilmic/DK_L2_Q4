@@ -202,10 +202,10 @@ main(void)
 
         //while(data.number_of_packets_processed < RUNLENGTH) {
         while(
-                data.number_of_packets_processed < RUNLENGTH ||
+                data.number_of_packets_processed < RUNLENGTH &&
 //                data.number_of_packets_processed_2 < RUNLENGTH ||
 //                data.number_of_packets_processed_3 < RUNLENGTH || 
-                0 //dummy var to keep format
+                1 //dummy var to keep format
                 ) {
           //printf("MM_debug while loop program time \n");
           simulation_run_execute_event(simulation_run);

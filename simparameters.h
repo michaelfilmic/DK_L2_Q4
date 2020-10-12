@@ -32,27 +32,17 @@
 //#define NO_CSV_OUTPUT
 //#define D_D_1_system
 
-#define PACKET_ARRIVAL_RATE 75
-#define PACKET_ARRIVAL_RATE_SW2 50
-#define PACKET_ARRIVAL_RATE_SW3 50
+#define PACKET_ARRIVAL_RATE 750
+#define PACKET_ARRIVAL_RATE_SW2 500
+#define PACKET_ARRIVAL_RATE_SW3 500
 
 #ifdef FAST_RUN
 
-#define P12_CUTOFF 0.50
-
-#ifdef D_D_1_system
-#define PACKET_LENGTH 10 /* bits */
-            //#define RUNLENGTH 10 /* packets */
-#define RUNLENGTH 2 /* packets */
-#define RANDOM_SEED_LIST 400050636
-#else
+#define P12_CUTOFF 0.99
 
 #define PACKET_LENGTH 1000 /* bits */
-            //#define RUNLENGTH 10 /* packets */
-#define RUNLENGTH 3 /* packets */
-#define RANDOM_SEED_LIST 400050636, 30002
-
-#endif //D_D_1_system
+#define RUNLENGTH 1000 /* packets */
+#define RANDOM_SEED_LIST 400050636
 
 #else
 
