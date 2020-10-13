@@ -270,8 +270,8 @@ main(void)
       fp = fopen(data_set_name, "a");
       //cell/element name/type
 
-      //fprintf(fp, ("Random Seed,"));
-      fprintf(fp, "%d,", i);
+      //fprintf(fp, ("loop,"));
+      fprintf(fp, "%f,", P12_CUTOFF_LIST[i]);
 
       //fprintf(fp, ("Packet arrival count,"));
       fprintf(fp, "%ld, ", for_avg_acc.arrival_count);

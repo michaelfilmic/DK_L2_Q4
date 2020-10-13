@@ -28,7 +28,7 @@
 
 /******************************************************************************/
 
-#define FAST_RUN
+//#define FAST_RUN
 //#define NO_CSV_OUTPUT
 //#define D_D_1_system
 
@@ -38,7 +38,7 @@
 
 #ifdef FAST_RUN
 
-#define P12_CUTOFF 0.5
+#define P12_CUTOFF 0.99
 
 #define PACKET_LENGTH 1000 /* bits */
 #define RUNLENGTH 1E3 /* packets */
@@ -46,12 +46,12 @@
 
 #else
 
-#define P12_CUTOFF 0.23, 0.31 
+#define P12_CUTOFF 0.32, 0.35, 0.40, 0.5, 0.6, 0.65, 0.67
 #define PACKET_LENGTH 1000 /* bits */
-#define RUNLENGTH 3000 /* packets */
+#define RUNLENGTH 100 /* packets */
 
 /* Comma separated list of random seeds to run. */
-#define RANDOM_SEED_LIST 400050636, 400099173, 225, 766, 590, 309, 519, 430, 638, 126 
+#define RANDOM_SEED_LIST 400050636, 400099173, 225
 
 #endif //FAST_RUN
 
